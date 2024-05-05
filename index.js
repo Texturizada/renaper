@@ -39,6 +39,7 @@ function renaper(ctx) {
         ctx.reply("Género inválido.");
         return;
     }
+    ctx.reply("Buscando...");
     axios.get(`https://api-ricardo.onrender.com/api/federador/${dni}/${sexo}`)
         .then(response => {
             const data = response.data;
