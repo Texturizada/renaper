@@ -85,7 +85,12 @@ function menu(ctx) {
 const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
 
 bot.command('ban', ban);
-bot.command('renaper', renaper);
+bot.command('dni', renaper);
 bot.command('start', menu);
 
-bot.launch();
+bot.launch({
+    webhook: {
+        domain: 'https://renaper.onrender.com',
+        port: 3000
+    }
+});
