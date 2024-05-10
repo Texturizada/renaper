@@ -76,7 +76,7 @@ function renaper(ctx) {
                 ctx.reply("Hubo un error al obtener los datos personales.");
             }
         })
-        .catch(() => ctx.reply("Error interno del servidor"));
+        .catch(error => ctx.reply(`Error interno del servidor: ${error.message}`));
 }
 
 function menu(ctx) {
