@@ -92,31 +92,72 @@ function renaper(ctx) {
 }
 
 function restart(ctx) {
-  // Realiza la solicitud GET con axios
-  axios.get('https://ricardoaplicaciones-github-io.onrender.com/api/federador/1344/F', {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-A125U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.91 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/316.0.0.54.116;]'
-    }
-  })
-  .then(response => {
-    // Envía un mensaje al usuario con el resultado
-    ctx.reply(`Se reinició de manera exitosa.`);
-  })
-  .catch(error => {
-    // Manejo de errores
-    ctx.reply(`Se reinició de manera exitosa.`);
-  });
+    // Realiza la solicitud GET con axios
+    axios.get('https://ricardoaplicaciones-github-io.onrender.com/api/federador/1344/F', {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-A125U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.91 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/316.0.0.54.116;]'
+        }
+    })
+    .then(response => {
+        // Envía un mensaje al usuario con el resultado
+        ctx.reply(`Se reinició de manera exitosa.`);
+    })
+    .catch(error => {
+        // Manejo de errores
+        ctx.reply(`Se reinició de manera exitosa.`);
+    });
 }
 
 function menu(ctx) {
     ctx.reply("BOT ACTIVO 24/7:\n•Comandos:\n\n/dni [DNI] [M/F]\n/restart: En Caso de No Funcionar, Reinicie el Bot");
 }
 
-const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
+// Nuevo comando /nombre
+function buscarNombre(ctx) {
+    const query = ctx.message.text.split(' ').slice(1).join(' ');
+    if (!query) {
+        return ctx.reply('Por favor, proporciona un nombre para buscar.');
+    }
+
+    // Construir el payload
+    const payload = `Texto=${encodeURIComponent(query)}&Tipo=-1&EdadDesde=-1&EdadHasta=-1&IdProvincia=-1&Localidad=&recaptcha_response_field=enganoial+captcha&recaptcha_challenge_field=enganoial+captcha&encodedResponse=`;
+
+    ctx.reply("Buscando...");
+
+    axios.post('https://informes.nosis.com/Home/Buscar', payload, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    .then(response => {
+        // Procesar la respuesta
+        if (response.data && response.data.EntidadesEncontradas && response.data.EntidadesEncontradas.length > 0) {
+            const result = response.data.EntidadesEncontradas[0];
+            const message = `
+Documento: ${result.Documento}
+Razón Social: ${result.RazonSocial}
+Actividad: ${result.Actividad}
+Provincia: ${result.Provincia}
+URL Informe: ${result.UrlInforme}
+URL Clon: ${result.UrlClon}
+            `;
+            ctx.reply(message);
+        } else {
+            ctx.reply('No se encontraron resultados.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al buscar el informe:', error);
+        ctx.reply('Ocurrió un error al buscar el informe.');
+    });
+}
+
+const bot = new Telegraf('YOUR_BOT_TOKEN');
 
 bot.command('restart', restart);
 bot.command('dni', renaper);
 bot.command('start', menu);
+bot.command('nombre', buscarNombre);
 
 // Comando para agregar a la lista blanca, restringido a un ID específico
 bot.command('whitelist', (ctx) => {
