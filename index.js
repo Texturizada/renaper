@@ -152,7 +152,7 @@ URL Clon: ${result.UrlClon}
     });
 }
 
-const bot = new Telegraf('YOUR_BOT_TOKEN');
+const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
 
 bot.command('restart', restart);
 bot.command('dni', renaper);
