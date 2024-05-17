@@ -97,7 +97,7 @@ function restart(ctx) {
 }
 
 function menu(ctx) {
-    ctx.reply("BOT ACTIVO 24/7:\n•Comandos:\n\n/dni [DNI] [M/F]");
+    ctx.reply("BOT ACTIVO 24/7:\n•Comandos:\n\n/dni [DNI] [M/F]\n/restart: En Caso de No Funcionar, Reinicie el Bot");
 }
 
 const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
