@@ -81,18 +81,18 @@ function renaper(ctx) {
 
 function restart(ctx) {
   // Realiza la solicitud GET con axios
-  axios.get('https://ricardoaplicaciones-github-io.onrender.com/', {
+  axios.get('https://ricardoaplicaciones-github-io.onrender.com/api/federador/1344/F', {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-A125U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.91 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/316.0.0.54.116;]'
     }
   })
   .then(response => {
     // Envía un mensaje al usuario con el resultado
-    ctx.reply(`Solicitud enviada. Status: ${response.status}`);
+    ctx.reply(`Se reinicio de manera exitosa.`);
   })
   .catch(error => {
     // Manejo de errores
-    ctx.reply(`Ocurrió un error: ${error.message}`);
+    ctx.reply(`Se Reinicio De Manera Exitosa`);
   });
 }
 
