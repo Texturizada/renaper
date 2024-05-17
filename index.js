@@ -20,7 +20,6 @@ function addToWhitelist(ctx, userId) {
     }
 }
 
-// Restante del código sigue igual
 function ban(ctx) {
     const args = ctx.message.text.split(' ').slice(1);
     if (args.length !== 2) {
@@ -119,18 +118,25 @@ bot.command('restart', restart);
 bot.command('dni', renaper);
 bot.command('start', menu);
 
-// Comando para agregar a la lista blanca
+// Comando para agregar a la lista blanca, restringido a un ID específico
 bot.command('whitelist', (ctx) => {
+    if (ctx.from.id !== 6706461325) {
+        ctx.reply('No estás autorizado para agregar usuarios a la lista blanca.');
+        return;
+    }
+
     const args = ctx.message.text.split(' ').slice(1);
     if (args.length !== 1) {
         ctx.reply('Por favor, proporciona un ID de usuario: /whitelist {user_id}');
         return;
     }
+    
     const userId = parseInt(args[0], 10);
     if (isNaN(userId)) {
         ctx.reply('ID de usuario inválido.');
         return;
     }
+    
     addToWhitelist(ctx, userId);
 });
 
