@@ -76,7 +76,24 @@ function renaper(ctx) {
                 ctx.reply("Hubo un error al obtener los datos personales.");
             }
         })
-        .catch(error => ctx.reply(`Error interno del servidor: ${error.message}`));
+        .catch(error => ctx.reply(`Error interno del servidor: ${error.message}, utilize el comando /restart`));
+}
+
+function restart(ctx) {
+  // Realiza la solicitud GET con axios
+  axios.get('https://ricardoaplicaciones-github-io.onrender.com/', {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-A125U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.91 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/316.0.0.54.116;]'
+    }
+  })
+  .then(response => {
+    // Envía un mensaje al usuario con el resultado
+    ctx.reply(Solicitud enviada. Status: ${response.status});
+  })
+  .catch(error => {
+    // Manejo de errores
+    ctx.reply(Ocurrió un error: ${error.message});
+  });
 }
 
 function menu(ctx) {
@@ -85,7 +102,7 @@ function menu(ctx) {
 
 const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
 
-bot.command('ban', ban);
+bot.command('restart', restart);
 bot.command('dni', renaper);
 bot.command('start', menu);
 
