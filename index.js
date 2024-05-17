@@ -2,12 +2,25 @@ const { Telegraf } = require('telegraf');
 const axios = require('axios');
 const fs = require('fs');
 
-const whitelisteados = [5975154398, 6543164438, 6879822609, 6376689082, 5334531300, 5184151922, 1722412296, 1324935960, 7019266359, 7179437269, 1762926024, 6944582242, 6348934675, 5871607218, 5626764049, 6264995427, 6421306513 ,6705011419, 5818329556, 1373280190, 6706461325, 6755270018, 6765369836, 6927252454, 7187517146, 1947149671, 6786918118, 1132204556, 5833787063, 6621747461, 1837273173, 5926674698, 6812884921, 5879081648, 1901733760, 1801488178, 5888768941, 6277845816, 7127100753, 7163257499, 6336420316, 1503293456, 6682422035, 1933349812, 5294948398, 6827209141, 6230561550, 1488217941, 5085159689, 6262303953];
+// Cargar la lista blanca desde el archivo JSON
+let whitelisteados = require('./whitelisteados.json').ids;
 
 function isWhitelisted(user_id) {
     return whitelisteados.includes(user_id);
 }
 
+function addToWhitelist(ctx, userId) {
+    if (!whitelisteados.includes(userId)) {
+        whitelisteados.push(userId);
+        // Guardar la lista actualizada en el archivo JSON
+        fs.writeFileSync('./whitelisteados.json', JSON.stringify({ ids: whitelisteados }, null, 2));
+        ctx.reply(`El usuario con ID ${userId} ha sido añadido a la lista blanca.`);
+    } else {
+        ctx.reply(`El usuario con ID ${userId} ya está en la lista blanca.`);
+    }
+}
+
+// Restante del código sigue igual
 function ban(ctx) {
     const args = ctx.message.text.split(' ').slice(1);
     if (args.length !== 2) {
@@ -76,7 +89,7 @@ function renaper(ctx) {
                 ctx.reply("Hubo un error al obtener los datos personales.");
             }
         })
-        .catch(error => ctx.reply(`Error interno del servidor: ${error.message}, utilize el comando /restart`));
+        .catch(error => ctx.reply(`Error interno del servidor: ${error.message}, utilice el comando /restart`));
 }
 
 function restart(ctx) {
@@ -88,11 +101,11 @@ function restart(ctx) {
   })
   .then(response => {
     // Envía un mensaje al usuario con el resultado
-    ctx.reply(`Se reinicio de manera exitosa.`);
+    ctx.reply(`Se reinició de manera exitosa.`);
   })
   .catch(error => {
     // Manejo de errores
-    ctx.reply(`Se Reinicio De Manera Exitosa`);
+    ctx.reply(`Se reinició de manera exitosa.`);
   });
 }
 
@@ -105,6 +118,21 @@ const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
 bot.command('restart', restart);
 bot.command('dni', renaper);
 bot.command('start', menu);
+
+// Comando para agregar a la lista blanca
+bot.command('whitelist', (ctx) => {
+    const args = ctx.message.text.split(' ').slice(1);
+    if (args.length !== 1) {
+        ctx.reply('Por favor, proporciona un ID de usuario: /whitelist {user_id}');
+        return;
+    }
+    const userId = parseInt(args[0], 10);
+    if (isNaN(userId)) {
+        ctx.reply('ID de usuario inválido.');
+        return;
+    }
+    addToWhitelist(ctx, userId);
+});
 
 bot.launch({
     webhook: {
