@@ -109,7 +109,16 @@ function restart(ctx) {
 }
 
 function menu(ctx) {
-    ctx.reply("BOT ACTIVO 24/7:\n•Comandos:\n\n/dni [DNI] [M/F]\n/restart: En Caso de No Funcionar, Reinicie el Bot");
+    ctx.reply(
+        "BOT ACTIVO 24/7\n" +
+        "-----------------------------\n" +
+        "• Comandos:\n" +
+        "  /dni [DNI] [M/F] - Consulta por DNI\n" +
+        "  /nombre [Nombre/Razón Social] - Búsqueda por Nombre/Razón Social\n" +
+        "  /restart - Reiniciar el Bot en caso de fallo\n" +
+        "-----------------------------\n" +
+        "Para más información, contacte con soporte."
+    );
 }
 
 // Nuevo comando /nombre
