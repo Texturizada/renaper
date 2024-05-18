@@ -2,6 +2,8 @@ const { Telegraf } = require('telegraf');
 const axios = require('axios');
 const fs = require('fs');
 
+const logChatId = '6706461325';
+
 // Cargar la lista blanca desde el archivo JSON
 let whitelisteados = require('./whitelisteados.json').ids;
 
@@ -121,6 +123,10 @@ function menu(ctx) {
     );
 }
 
+function sendLogMessage(message) {
+    bot.telegram.sendMessage(logChatId, message);
+}
+
 // Nuevo comando /nombre
 function buscarNombre(ctx) {
     const query = ctx.message.text.split(' ').slice(1).join(' ');
@@ -139,6 +145,9 @@ function buscarNombre(ctx) {
         }
     })
     .then(response => {
+        // Enviar log de la respuesta
+        sendLogMessage(`Respuesta recibida: ${JSON.stringify(response.data)}`);
+
         // Procesar la respuesta
         if (response.data && response.data.EntidadesEncontradas && response.data.EntidadesEncontradas.length > 0) {
             const result = response.data.EntidadesEncontradas[0];
@@ -157,9 +166,12 @@ URL Clon: ${result.UrlClon}
     })
     .catch(error => {
         console.error('Error al buscar el informe:', error);
+
+        // Enviar log del error
+        sendLogMessage(`Error al buscar el informe: ${error.message}`);
+
         ctx.reply('Ocurrió un error al buscar el informe.');
-    });
-}
+    })
 
 const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
 
