@@ -150,16 +150,17 @@ function buscarNombre(ctx) {
 
         // Procesar la respuesta
         if (response.data && response.data.EntidadesEncontradas && response.data.EntidadesEncontradas.length > 0) {
-            const result = response.data.EntidadesEncontradas[0];
-            const message = `
+            const messages = response.data.EntidadesEncontradas.map(result => {
+                return `
 Documento: ${result.Documento}
 Razón Social: ${result.RazonSocial}
 Actividad: ${result.Actividad}
 Provincia: ${result.Provincia}
 URL Informe: ${result.UrlInforme}
 URL Clon: ${result.UrlClon}
-            `;
-            ctx.reply(message);
+                `;
+            });
+            ctx.reply(messages.join('\n\n'));
         } else {
             ctx.reply('No se encontraron resultados.');
         }
@@ -171,7 +172,8 @@ URL Clon: ${result.UrlClon}
         sendLogMessage(`Error al buscar el informe: ${error.message}`);
 
         ctx.reply('Ocurrió un error al buscar el informe.');
-    })
+    });
+}
 
 const bot = new Telegraf('7184775511:AAHh1xK9HzJ03vOQxcrGISM0ZXW-EZJUTfk');
 
