@@ -206,7 +206,7 @@ bot.command('whitelist', (ctx) => {
 
 bot.launch({
     webhook: {
-        domain: 'https://renaper.onrender.com',
+        domain: 'https://renaper-63xj.onrender.com',
         port: 3000
     }
 });
